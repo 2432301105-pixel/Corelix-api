@@ -6,6 +6,15 @@ import pandas as pd
 from scipy import stats
 
 CATALOGUE = [
+    {"symbol": "IVV",     "name": "iShares Core S&P 500 ETF",              "asset_type": "etf",       "exchange": "NYSE"},
+    {"symbol": "XLK",     "name": "Technology Select Sector SPDR Fund",    "asset_type": "etf",       "exchange": "NYSE"},
+    {"symbol": "IWM",     "name": "iShares Russell 2000 ETF",              "asset_type": "etf",       "exchange": "NYSE"},
+    {"symbol": "DIA",     "name": "SPDR Dow Jones Industrial Average ETF Trust", "asset_type": "etf", "exchange": "NYSE"},
+    {"symbol": "XLF",     "name": "Financial Select Sector SPDR Fund",     "asset_type": "etf",       "exchange": "NYSE"},
+    {"symbol": "XLE",     "name": "Energy Select Sector SPDR Fund",        "asset_type": "etf",       "exchange": "NYSE"},
+    {"symbol": "IEF",     "name": "iShares 7-10 Year Treasury Bond ETF",   "asset_type": "etf",       "exchange": "NASDAQ"},
+    {"symbol": "HYG",     "name": "iShares iBoxx $ High Yield Corporate Bond ETF", "asset_type": "etf", "exchange": "NYSE"},
+    {"symbol": "VNQ",     "name": "Vanguard Real Estate ETF",              "asset_type": "etf",       "exchange": "NYSE"},
     {"symbol": "AAPL",    "name": "Apple Inc.",                   "asset_type": "stock",     "exchange": "NASDAQ"},
     {"symbol": "MSFT",    "name": "Microsoft Corporation",        "asset_type": "stock",     "exchange": "NASDAQ"},
     {"symbol": "GOOGL",   "name": "Alphabet Inc.",                "asset_type": "stock",     "exchange": "NASDAQ"},
@@ -38,6 +47,15 @@ _FREQ_ALIAS = {"daily": "B", "weekly": "W-FRI", "monthly": "BME"}
 _ROLLING_WINDOW = {"daily": 30, "weekly": 8, "monthly": 3}
 
 _SYMBOL_PARAMS = {
+    "IVV":     {"drift": 0.00030, "idio": 0.0023, "mkt": 1.00, "tech": 0.18, "rates": -0.05, "gold": 0.00, "crypto": 0.00},
+    "XLK":     {"drift": 0.00042, "idio": 0.0045, "mkt": 1.10, "tech": 1.35, "rates": -0.08, "gold": 0.00, "crypto": 0.00},
+    "IWM":     {"drift": 0.00028, "idio": 0.0060, "mkt": 1.15, "tech": 0.10, "rates": -0.03, "gold": 0.00, "crypto": 0.00},
+    "DIA":     {"drift": 0.00027, "idio": 0.0035, "mkt": 0.95, "tech": 0.05, "rates": -0.03, "gold": 0.00, "crypto": 0.00},
+    "XLF":     {"drift": 0.00026, "idio": 0.0042, "mkt": 1.00, "tech": 0.00, "rates": 0.55, "gold": 0.00, "crypto": 0.00},
+    "XLE":     {"drift": 0.00024, "idio": 0.0058, "mkt": 0.90, "tech": 0.00, "rates": 0.05, "gold": 0.10, "crypto": 0.00},
+    "IEF":     {"drift": 0.00002, "idio": 0.0028, "mkt": -0.05, "tech": 0.00, "rates": -0.75, "gold": 0.05, "crypto": 0.00},
+    "HYG":     {"drift": 0.00020, "idio": 0.0038, "mkt": 0.75, "tech": 0.05, "rates": -0.20, "gold": 0.00, "crypto": 0.00},
+    "VNQ":     {"drift": 0.00022, "idio": 0.0040, "mkt": 0.85, "tech": 0.00, "rates": -0.35, "gold": 0.00, "crypto": 0.00},
     "AAPL":    {"drift": 0.00045, "idio": 0.0070, "mkt": 1.15, "tech": 1.10, "rates": -0.10, "gold": 0.00, "crypto": 0.00},
     "MSFT":    {"drift": 0.00042, "idio": 0.0065, "mkt": 1.05, "tech": 1.00, "rates": -0.05, "gold": 0.00, "crypto": 0.00},
     "GOOGL":   {"drift": 0.00040, "idio": 0.0070, "mkt": 1.05, "tech": 1.00, "rates": -0.05, "gold": 0.00, "crypto": 0.00},
