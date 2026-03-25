@@ -108,3 +108,117 @@ class AnalysisResponse(BaseModel):
     rolling_series:    list[RollingPoint]
     insight:           InsightBlock
     disclaimer:        DisclaimerBlock
+
+
+class RiskDistribution(str, Enum):
+    normal = "normal"
+    student_t = "student_t"
+
+
+class RiskProfileRequest(BaseModel):
+    symbol: str = Field(..., min_length=1, max_length=24)
+    lookback: int = Field(default=252, ge=60, le=1260)
+    interval: str = Field(default="1d", min_length=2, max_length=8)
+    distribution: RiskDistribution = RiskDistribution.student_t
+    refresh: str = Field(default="if_stale", min_length=2, max_length=20)
+
+
+class RiskBatchProfileRequest(BaseModel):
+    symbols: list[str] = Field(..., min_length=1, max_length=120)
+    lookback: int = Field(default=252, ge=60, le=1260)
+    interval: str = Field(default="1d", min_length=2, max_length=8)
+    distribution: RiskDistribution = RiskDistribution.student_t
+    refresh: str = Field(default="if_stale", min_length=2, max_length=20)
+
+    @model_validator(mode="after")
+    def normalize_symbols(self) -> "RiskBatchProfileRequest":
+        normalized: list[str] = []
+        seen: set[str] = set()
+        for raw_symbol in self.symbols:
+            symbol = raw_symbol.strip().upper()
+            if not symbol or symbol in seen:
+                continue
+            seen.add(symbol)
+            normalized.append(symbol)
+        if not normalized:
+            raise ValueError("At least one valid symbol is required.")
+        self.symbols = normalized
+        return self
+
+
+class RiskMeta(BaseModel):
+    symbol: str
+    name: str
+    exchange: str
+    currency: str
+    interval: str
+    lookback: int
+    as_of: str
+
+
+class RiskPrice(BaseModel):
+    last: float
+    previous_close: float
+    change_percent: float
+
+
+class RiskModelSpec(BaseModel):
+    family: str = "GARCH"
+    mean: str = "Constant"
+    p: int = 1
+    q: int = 1
+    distribution: str
+
+
+class GARCHOutput(BaseModel):
+    mu: float
+    omega: float
+    alpha1: float
+    beta1: float
+    alpha_plus_beta: float
+    latest_conditional_vol: float
+    long_run_vol: float
+
+
+class RiskScores(BaseModel):
+    risk: int
+    persistence: int
+    shock: int
+    regime: str
+
+
+class RiskForecast(BaseModel):
+    day_1: int
+    day_5: int
+    day_20: int
+
+
+class RiskSeriesPoint(BaseModel):
+    date: str
+    value: float
+
+
+class RiskHistoryBundle(BaseModel):
+    conditional_volatility: list[RiskSeriesPoint]
+    returns: list[RiskSeriesPoint]
+
+
+class RiskCommentary(BaseModel):
+    summary: str
+    watchlist_note: str
+
+
+class RiskProfileResponse(BaseModel):
+    meta: RiskMeta
+    price: RiskPrice
+    model: RiskModelSpec
+    garch: GARCHOutput
+    scores: RiskScores
+    forecast: RiskForecast
+    history: RiskHistoryBundle
+    commentary: RiskCommentary
+    disclaimer: str
+
+
+class RiskBatchProfilesResponse(BaseModel):
+    profiles: list[RiskProfileResponse]

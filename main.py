@@ -2,7 +2,7 @@ from fastapi import FastAPI, Request, status
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from app.api import health, assets, analysis
+from app.api import health, assets, analysis, risk
 from app.core.config import settings
 
 def create_app():
@@ -22,6 +22,7 @@ def create_app():
     app.include_router(health.router, prefix=settings.api_prefix)
     app.include_router(assets.router, prefix=settings.api_prefix)
     app.include_router(analysis.router, prefix=settings.api_prefix)
+    app.include_router(risk.router, prefix=settings.api_prefix)
 
     @app.get("/", include_in_schema=False)
     async def root():
