@@ -7,7 +7,7 @@ from app.core.config import settings
 
 def create_app():
     app = FastAPI(title=settings.app_name, version=settings.app_version, docs_url="/docs")
-    app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
+    app.add_middleware(CORSMiddleware, allow_origins=settings.allowed_origins, allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
 
     @app.exception_handler(RequestValidationError)
     async def validation_handler(request, exc):

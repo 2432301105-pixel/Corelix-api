@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: corelix-api
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn -w 2 -k uvicorn.workers.UvicornWorker main:app --bind 0.0.0.0:$PORT --timeout 120
+    healthCheckPath: /v1/health
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: ALLOWED_ORIGINS
+        value: https://corelix-api.onrender.com
+      - key: PYTHON_VERSION
+        value: 3.11.9
